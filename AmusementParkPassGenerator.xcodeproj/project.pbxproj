@@ -12,6 +12,7 @@
 		105DF4B01D278040008B91CB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 105DF4AE1D278040008B91CB /* Main.storyboard */; };
 		105DF4B21D278040008B91CB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 105DF4B11D278040008B91CB /* Assets.xcassets */; };
 		105DF4B51D278040008B91CB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 105DF4B31D278040008B91CB /* LaunchScreen.storyboard */; };
+		105DF4BF1D278172008B91CB /* EntrantModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 105DF4BE1D278172008B91CB /* EntrantModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +23,7 @@
 		105DF4B11D278040008B91CB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		105DF4B41D278040008B91CB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		105DF4B61D278040008B91CB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		105DF4BE1D278172008B91CB /* EntrantModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntrantModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +58,7 @@
 			children = (
 				105DF4AA1D278040008B91CB /* AppDelegate.swift */,
 				105DF4AC1D278040008B91CB /* ViewController.swift */,
+				105DF4BE1D278172008B91CB /* EntrantModel.swift */,
 				105DF4AE1D278040008B91CB /* Main.storyboard */,
 				105DF4B11D278040008B91CB /* Assets.xcassets */,
 				105DF4B31D278040008B91CB /* LaunchScreen.storyboard */,
@@ -137,6 +140,7 @@
 			files = (
 				105DF4AD1D278040008B91CB /* ViewController.swift in Sources */,
 				105DF4AB1D278040008B91CB /* AppDelegate.swift in Sources */,
+				105DF4BF1D278172008B91CB /* EntrantModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

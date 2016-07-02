@@ -180,6 +180,12 @@ enum RequiredInfoError: ErrorType {
 
 // MARK: Generate Pass
 
+func printPass(person: Person) {
+    if let pass = generatePass(person) {
+        print(pass.title + "\n" + pass.passType + "\n" + pass.rideInfo + "\n" + pass.foodDiscountInfo + "\n" + pass.merchandiseDiscountInfo)
+    }
+}
+
 func generatePass(person: Person) -> Pass? {
     let title: String
     let passType: String

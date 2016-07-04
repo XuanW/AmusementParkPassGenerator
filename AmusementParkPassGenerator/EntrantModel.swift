@@ -54,11 +54,12 @@ struct DiscountAccessType {
 struct PersonalInfo {
     var firstName: String?
     var lastName: String?
-    var dateOfBirth: NSDate?
+    var dateOfBirth: String?
     var street: String?
     var city: String?
     var state: String?
     var zip: String?
+
 }
 
 //struct Person {
@@ -175,6 +176,7 @@ enum RequiredInfoError: ErrorType {
     case MissingState
     case MissingZipCode
     case MissingDateOfBirth
+    case AgeRequirementNotMet
 }
 
 
@@ -259,7 +261,11 @@ func gatherRequiredInfo(entrantType: Entrant, person: PersonalInfo) throws -> Pe
         switch guestType {
         case .freeChild:
             if let dateOfBirth = person.dateOfBirth {
-                infoGathered.dateOfBirth = dateOfBirth
+                if satisfyAgeRequirement(dateOfBirth) {
+                    infoGathered.dateOfBirth = dateOfBirth
+                } else {
+                    throw RequiredInfoError.AgeRequirementNotMet
+                }
             } else {
                 throw RequiredInfoError.MissingDateOfBirth
             }
@@ -307,7 +313,29 @@ func gatherRequiredInfo(entrantType: Entrant, person: PersonalInfo) throws -> Pe
 
 
 
+// Helper Methods
 
+func convertStringToNSDate(dateOfBirthAsString: String) -> NSDate? {
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.dateFormat = "MM-dd-yyyy"
+        let dateOfBirthAsNSDate: NSDate = dateFormatter.dateFromString(dateOfBirthAsString)!
+        return dateOfBirthAsNSDate
+    // TODO: Add error case of not a valid date format
+}
+
+func satisfyAgeRequirement(dateOfBirthAsString: String) -> Bool {
+    let currentDate = NSDate()
+    if let dateOfBirth = convertStringToNSDate(dateOfBirthAsString) {
+        let diffDateComponents = NSCalendar.currentCalendar().components(NSCalendarUnit.Year, fromDate: dateOfBirth, toDate: currentDate, options: NSCalendarOptions.init(rawValue: 0))
+        if diffDateComponents.year < 5 {
+            return true
+        } else {
+            return false
+        }
+    }
+    return false
+    // TODO: After dealing with not a valide date formate, get ride of this return false.
+}
 
 
 

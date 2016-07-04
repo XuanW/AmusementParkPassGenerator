@@ -13,8 +13,8 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        let samplePerson = PersonalInfo(firstName: nil, lastName: nil, dateOfBirth: nil, street: nil, city: nil, state: nil, zip: nil)
-        printPass(Guest.classic, person: samplePerson)
+        let samplePerson = PersonalInfo(firstName: nil, lastName: nil, dateOfBirth: "03-28-2010", street: nil, city: nil, state: nil, zip: nil)
+        printPass(Guest.freeChild, person: samplePerson)
     }
 
     override func didReceiveMemoryWarning() {

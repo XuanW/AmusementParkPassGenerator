@@ -14,8 +14,8 @@
 		105DF4B51D278040008B91CB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 105DF4B31D278040008B91CB /* LaunchScreen.storyboard */; };
 		105DF4BF1D278172008B91CB /* EntrantModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 105DF4BE1D278172008B91CB /* EntrantModel.swift */; };
 		105DF4C11D2A21B8008B91CB /* SwiperMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 105DF4C01D2A21B8008B91CB /* SwiperMethod.swift */; };
-		105DF4C41D2A3463008B91CB /* AccessDenied.wav in Resources */ = {isa = PBXBuildFile; fileRef = 105DF4C21D2A3463008B91CB /* AccessDenied.wav */; };
-		105DF4C51D2A3463008B91CB /* AccessGranted.wav in Resources */ = {isa = PBXBuildFile; fileRef = 105DF4C31D2A3463008B91CB /* AccessGranted.wav */; };
+		105DF4C81D2A354B008B91CB /* AccessDenied.wav in Resources */ = {isa = PBXBuildFile; fileRef = 105DF4C61D2A354B008B91CB /* AccessDenied.wav */; };
+		105DF4C91D2A354B008B91CB /* AccessGranted.wav in Resources */ = {isa = PBXBuildFile; fileRef = 105DF4C71D2A354B008B91CB /* AccessGranted.wav */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,8 +28,8 @@
 		105DF4B61D278040008B91CB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		105DF4BE1D278172008B91CB /* EntrantModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntrantModel.swift; sourceTree = "<group>"; };
 		105DF4C01D2A21B8008B91CB /* SwiperMethod.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiperMethod.swift; sourceTree = "<group>"; };
-		105DF4C21D2A3463008B91CB /* AccessDenied.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = AccessDenied.wav; path = ../../AudioFiles/AccessDenied.wav; sourceTree = "<group>"; };
-		105DF4C31D2A3463008B91CB /* AccessGranted.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = AccessGranted.wav; path = ../../AudioFiles/AccessGranted.wav; sourceTree = "<group>"; };
+		105DF4C61D2A354B008B91CB /* AccessDenied.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = AccessDenied.wav; sourceTree = "<group>"; };
+		105DF4C71D2A354B008B91CB /* AccessGranted.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = AccessGranted.wav; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,13 +62,13 @@
 		105DF4A91D278040008B91CB /* AmusementParkPassGenerator */ = {
 			isa = PBXGroup;
 			children = (
+				105DF4C61D2A354B008B91CB /* AccessDenied.wav */,
+				105DF4C71D2A354B008B91CB /* AccessGranted.wav */,
 				105DF4AA1D278040008B91CB /* AppDelegate.swift */,
 				105DF4AC1D278040008B91CB /* ViewController.swift */,
 				105DF4BE1D278172008B91CB /* EntrantModel.swift */,
 				105DF4C01D2A21B8008B91CB /* SwiperMethod.swift */,
 				105DF4AE1D278040008B91CB /* Main.storyboard */,
-				105DF4C21D2A3463008B91CB /* AccessDenied.wav */,
-				105DF4C31D2A3463008B91CB /* AccessGranted.wav */,
 				105DF4B11D278040008B91CB /* Assets.xcassets */,
 				105DF4B31D278040008B91CB /* LaunchScreen.storyboard */,
 				105DF4B61D278040008B91CB /* Info.plist */,
@@ -135,10 +135,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				105DF4B51D278040008B91CB /* LaunchScreen.storyboard in Resources */,
-				105DF4C51D2A3463008B91CB /* AccessGranted.wav in Resources */,
+				105DF4C91D2A354B008B91CB /* AccessGranted.wav in Resources */,
 				105DF4B21D278040008B91CB /* Assets.xcassets in Resources */,
 				105DF4B01D278040008B91CB /* Main.storyboard in Resources */,
-				105DF4C41D2A3463008B91CB /* AccessDenied.wav in Resources */,
+				105DF4C81D2A354B008B91CB /* AccessDenied.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

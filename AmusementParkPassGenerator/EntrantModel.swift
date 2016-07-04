@@ -49,32 +49,6 @@ struct DiscountAccessType {
     var merchandise: Int
 }
 
-// MARK: Other objects
-
-struct PersonalInfo {
-    var firstName: String?
-    var lastName: String?
-    var dateOfBirth: String?
-    var street: String?
-    var city: String?
-    var state: String?
-    var zip: String?
-
-}
-
-struct Pass {
-    let title: String
-    let passType: String
-    let rideInfo: String
-    let foodDiscountInfo: String
-    let merchandiseDiscountInfo: String
-    let areaAccess: AreaAccessType
-    let rideAccess: RideAccessType
-    let discountAccess: DiscountAccessType
-    let personalInfo: PersonalInfo
-}
-
-
 // MARK: Entrant types
 
 enum Guest: Entrant, AreaAccess, RideAccess, DiscountAccess {
@@ -117,7 +91,6 @@ enum Employee: Entrant, AreaAccess, RideAccess, DiscountAccess {
     case hourlyFood
     case hourlyRide
     case hourlyMaintenance
-    case manager
     
     func getAreaAccessDetail() -> AreaAccessType {
         var kitchenAccess: Bool, rideControlAccess: Bool, maintenanceAccess: Bool, officeAccess: Bool
@@ -137,11 +110,6 @@ enum Employee: Entrant, AreaAccess, RideAccess, DiscountAccess {
             rideControlAccess = true
             maintenanceAccess = true
             officeAccess = false
-        case .manager:
-            kitchenAccess = true
-            rideControlAccess = true
-            maintenanceAccess = true
-            officeAccess = true
         }
         return AreaAccessType(amusement: true, kitchen: kitchenAccess, rideControl: rideControlAccess, maintenance: maintenanceAccess, office: officeAccess)
     }
@@ -151,17 +119,49 @@ enum Employee: Entrant, AreaAccess, RideAccess, DiscountAccess {
     }
     
     func getDiscountAccessDetail() -> DiscountAccessType {
-        var foodDiscount: Int, merchandiseDiscount: Int
-        switch self {
-        case .manager:
-            foodDiscount = 25
-            merchandiseDiscount = 25
-        default:
-            foodDiscount = 15
-            merchandiseDiscount = 25
-        }
-        return DiscountAccessType(food: foodDiscount, merchandise: merchandiseDiscount)
+        return DiscountAccessType(food: 15, merchandise: 25)
     }
+}
+
+enum Manager: Entrant, AreaAccess, RideAccess, DiscountAccess {
+    case manager
+    
+    func getAreaAccessDetail() -> AreaAccessType {
+        return AreaAccessType(amusement: true, kitchen: true, rideControl: true, maintenance: true, office: true)
+    }
+    
+    func getRideAccessDetail() -> RideAccessType {
+        return RideAccessType(accessAllRides: true, skipAllRideLines: false)
+    }
+    
+    func getDiscountAccessDetail() -> DiscountAccessType {
+        return DiscountAccessType(food: 25, merchandise: 25)
+    }
+}
+
+// MARK: Other objects
+
+struct PersonalInfo {
+    var firstName: String?
+    var lastName: String?
+    var dateOfBirth: String?
+    var street: String?
+    var city: String?
+    var state: String?
+    var zip: String?
+    
+}
+
+struct Pass {
+    let title: String
+    let passType: String
+    let rideInfo: String
+    let foodDiscountInfo: String
+    let merchandiseDiscountInfo: String
+    let areaAccess: AreaAccessType
+    let rideAccess: RideAccessType
+    let discountAccess: DiscountAccessType
+    let personalInfo: PersonalInfo
 }
 
 // MARK: Error Types
@@ -226,12 +226,22 @@ func generatePass(entrantType: Entrant, person: PersonalInfo) -> Pass? {
                 rideInfo = "Unlimited Rides. Priority: VIP."
                 
             }
+        case is Manager:
+            let managerType = entrantType as! Manager
+            areaAccess = managerType.getAreaAccessDetail()
+            rideAccess = managerType.getRideAccessDetail()
+            discountAccess = managerType.getDiscountAccessDetail()
+            foodDiscountInfo = "\(discountAccess.food)% Food Discount"
+            merchandiseDiscountInfo = "\(discountAccess.merchandise)% Merchandise Discount"
+            passType = "Manager"
+            rideInfo = "Unlimited Rides. Priority: Regular."
+            
         default:
             let employeeType = entrantType as! Employee
             areaAccess = employeeType.getAreaAccessDetail()
             rideAccess = employeeType.getRideAccessDetail()
             discountAccess = employeeType.getDiscountAccessDetail()
-            rideInfo = "Unlimited Rides"
+            rideInfo = "Unlimited Rides. Priority: Regular."
             foodDiscountInfo = "\(discountAccess.food)% Food Discount"
             merchandiseDiscountInfo = "\(discountAccess.merchandise)% Merchandise Discount"
 
@@ -242,8 +252,6 @@ func generatePass(entrantType: Entrant, person: PersonalInfo) -> Pass? {
                 passType = "Hourly Employee - Ride Services"
             case .hourlyMaintenance:
                 passType = "Hourly Employee - Maintenance"
-            case .manager:
-                passType = "Manager"
             }
         }
         
@@ -274,7 +282,7 @@ func gatherRequiredInfo(entrantType: Entrant, person: PersonalInfo) throws -> Pe
             return person
         }
     default:
-        // Default will be employee type, require all info except date of birth
+        // Default will be employee or manager type, require all info except date of birth
         guard person.firstName != nil else {
             throw RequiredInfoError.MissingFirstName
         }

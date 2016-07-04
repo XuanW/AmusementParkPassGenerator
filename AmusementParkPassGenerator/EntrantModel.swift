@@ -74,6 +74,7 @@ struct Pass {
     let foodDiscountInfo: String
     let merchandiseDiscountInfo: String
     let areaAccess: AreaAccessType
+    let personalInfo: PersonalInfo
 }
 
 
@@ -244,7 +245,7 @@ func generatePass(entrantType: Entrant, person: PersonalInfo) -> Pass? {
             }
         }
         
-        return Pass(title: title, passType: passType, rideInfo: rideInfo, foodDiscountInfo: foodDiscountInfo, merchandiseDiscountInfo: merchandiseDiscountInfo, areaAccess: areaAccess)
+        return Pass(title: title, passType: passType, rideInfo: rideInfo, foodDiscountInfo: foodDiscountInfo, merchandiseDiscountInfo: merchandiseDiscountInfo, areaAccess: areaAccess, personalInfo: infoGathered)
         
     } catch let error {
         print("Error: \(error)")
@@ -253,9 +254,6 @@ func generatePass(entrantType: Entrant, person: PersonalInfo) -> Pass? {
 }
 
 func gatherRequiredInfo(entrantType: Entrant, person: PersonalInfo) throws -> PersonalInfo {
-    
-    var infoGathered = PersonalInfo()
-    
     switch entrantType {
     case is Guest:
         let guestType = entrantType as! Guest
@@ -263,7 +261,7 @@ func gatherRequiredInfo(entrantType: Entrant, person: PersonalInfo) throws -> Pe
         case .freeChild:
             if let dateOfBirth = person.dateOfBirth {
                 if satisfyAgeRequirement(dateOfBirth) {
-                    infoGathered.dateOfBirth = dateOfBirth
+                    return person
                 } else {
                     throw RequiredInfoError.AgeRequirementNotMet
                 }
@@ -271,43 +269,29 @@ func gatherRequiredInfo(entrantType: Entrant, person: PersonalInfo) throws -> Pe
                 throw RequiredInfoError.MissingDateOfBirth
             }
         default:
-            break
+            return person
         }
-        return infoGathered
     default:
         // Default will be employee type, require all info except date of birth
-        if let firstName = person.firstName {
-            infoGathered.firstName = firstName
-        } else {
+        guard person.firstName != nil else {
             throw RequiredInfoError.MissingFirstName
         }
-        if let lastName = person.lastName {
-            infoGathered.lastName = lastName
-        } else {
+        guard person.lastName != nil else {
             throw RequiredInfoError.MissingLastName
         }
-        if let street = person.street {
-            infoGathered.street = street
-        } else {
+        guard person.street != nil else {
             throw RequiredInfoError.MissingStreetAddress
         }
-        if let city = person.city {
-            infoGathered.city = city
-        } else {
+        guard person.city != nil else {
             throw RequiredInfoError.MissingCity
         }
-        if let state = person.state {
-            infoGathered.state = state
-        } else {
+        guard person.state != nil else {
             throw RequiredInfoError.MissingState
         }
-        if let zip = person.zip {
-            infoGathered.zip = zip
-        } else {
+        guard person.zip != nil else {
             throw RequiredInfoError.MissingZipCode
         }
-        
-        return infoGathered
+        return person
     }
 }
 
@@ -343,7 +327,21 @@ func satisfyAgeRequirement(dateOfBirthAsString: String) -> Bool {
     return false
 }
 
-
+func checkBirthday(dateOfBirthAsString: String) {
+    do {
+        let currentDate = NSDate()
+        if let dateOfBirth = try convertStringToNSDate(dateOfBirthAsString) {
+            let birthdayDateComponents = NSCalendar.currentCalendar().components([NSCalendarUnit.Month, NSCalendarUnit.Day], fromDate: dateOfBirth)
+            let currentDayDateComponents = NSCalendar.currentCalendar().components([NSCalendarUnit.Month, NSCalendarUnit.Day], fromDate: currentDate)
+            if birthdayDateComponents.month == currentDayDateComponents.month && birthdayDateComponents.day == currentDayDateComponents.day {
+                print("Happy birthday! Hope you enjoy your time here!")
+            }
+        }
+    }
+    catch let error {
+        print("Error: \(error)")
+    }
+}
 
 
 

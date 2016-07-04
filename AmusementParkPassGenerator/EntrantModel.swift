@@ -177,6 +177,7 @@ enum RequiredInfoError: ErrorType {
     case MissingZipCode
     case MissingDateOfBirth
     case AgeRequirementNotMet
+    case DateFormatNotCorrect
 }
 
 
@@ -269,7 +270,6 @@ func gatherRequiredInfo(entrantType: Entrant, person: PersonalInfo) throws -> Pe
             } else {
                 throw RequiredInfoError.MissingDateOfBirth
             }
-            // TODO: Calculate age and throw errors accordingly
         default:
             break
         }
@@ -315,26 +315,32 @@ func gatherRequiredInfo(entrantType: Entrant, person: PersonalInfo) throws -> Pe
 
 // Helper Methods
 
-func convertStringToNSDate(dateOfBirthAsString: String) -> NSDate? {
-        let dateFormatter = NSDateFormatter()
-        dateFormatter.dateFormat = "MM-dd-yyyy"
-        let dateOfBirthAsNSDate: NSDate = dateFormatter.dateFromString(dateOfBirthAsString)!
+func convertStringToNSDate(dateOfBirthAsString: String) throws -> NSDate? {
+    let dateFormatter = NSDateFormatter()
+    dateFormatter.dateFormat = "MM/dd/yyyy"
+    if let dateOfBirthAsNSDate: NSDate = dateFormatter.dateFromString(dateOfBirthAsString){
         return dateOfBirthAsNSDate
-    // TODO: Add error case of not a valid date format
+    } else {
+        throw RequiredInfoError.DateFormatNotCorrect
+    }
 }
 
 func satisfyAgeRequirement(dateOfBirthAsString: String) -> Bool {
-    let currentDate = NSDate()
-    if let dateOfBirth = convertStringToNSDate(dateOfBirthAsString) {
-        let diffDateComponents = NSCalendar.currentCalendar().components(NSCalendarUnit.Year, fromDate: dateOfBirth, toDate: currentDate, options: NSCalendarOptions.init(rawValue: 0))
-        if diffDateComponents.year < 5 {
-            return true
-        } else {
-            return false
+    do {
+        let currentDate = NSDate()
+        if let dateOfBirth = try convertStringToNSDate(dateOfBirthAsString) {
+            let diffDateComponents = NSCalendar.currentCalendar().components(NSCalendarUnit.Year, fromDate: dateOfBirth, toDate: currentDate, options: NSCalendarOptions.init(rawValue: 0))
+            if diffDateComponents.year < 5 {
+                return true
+            } else {
+                return false
+            }
         }
     }
+    catch let error {
+        print("Error: \(error)")
+    }
     return false
-    // TODO: After dealing with not a valide date formate, get ride of this return false.
 }
 
 

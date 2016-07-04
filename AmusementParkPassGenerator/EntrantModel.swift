@@ -51,7 +51,7 @@ struct DiscountAccessType {
 
 // MARK: Other objects
 
-struct RequiredInfo {
+struct PersonalInfo {
     var firstName: String?
     var lastName: String?
     var dateOfBirth: NSDate?
@@ -61,10 +61,10 @@ struct RequiredInfo {
     var zip: String?
 }
 
-struct Person {
-    let entrantType: Entrant
-    let info: RequiredInfo
-}
+//struct Person {
+//    let entrantType: Entrant
+//    let info: PersonalInfo
+//}
 
 struct Pass {
     let title: String
@@ -180,13 +180,13 @@ enum RequiredInfoError: ErrorType {
 
 // MARK: Generate Pass
 
-func printPass(person: Person) {
-    if let pass = generatePass(person) {
+func printPass(entrantType: Entrant, person: PersonalInfo) {
+    if let pass = generatePass(entrantType, person: person) {
         print(pass.title + "\n" + pass.passType + "\n" + pass.rideInfo + "\n" + pass.foodDiscountInfo + "\n" + pass.merchandiseDiscountInfo)
     }
 }
 
-func generatePass(person: Person) -> Pass? {
+func generatePass(entrantType: Entrant, person: PersonalInfo) -> Pass? {
     let title: String
     let passType: String
     let rideInfo: String
@@ -195,18 +195,16 @@ func generatePass(person: Person) -> Pass? {
     let areaAccess: AreaAccessType
     
     do {
-        let infoGathered = try gatherRequiredInfo(person)
+        let infoGathered = try gatherRequiredInfo(entrantType, person: person)
         if let firstName = infoGathered.firstName, lastName = infoGathered.lastName {
             title = "\(firstName) \(lastName)"
         } else {
             title = "Amusement Park Pass"
         }
         
-        switch person.entrantType {
+        switch entrantType {
         case is Guest:
-            let guestType = person.entrantType as! Guest
-            
-            rideInfo = "Unlimited Rides. Priority: \(guestType.getRideAccessDetail().skipAllRideLines)"
+            let guestType = entrantType as! Guest
             foodDiscountInfo = "\(guestType.getDiscountAccessDetail().food)% Food Discount"
             merchandiseDiscountInfo = "\(guestType.getDiscountAccessDetail().merchandise)% Merchandise Discount"
             areaAccess = guestType.getAreaAccessDetail()
@@ -214,14 +212,17 @@ func generatePass(person: Person) -> Pass? {
             switch guestType {
             case .classic:
                 passType = "Classic Guest Pass"
+                rideInfo = "Unlimited Rides. Priority: Regular."
             case .freeChild:
                 passType = "Child Guest Pass"
+                rideInfo = "Unlimited Rides. Priority: Regular."
             case .vip:
                 passType = "VIP Guest Pass"
+                rideInfo = "Unlimited Rides. Priority: VIP."
                 
             }
         default:
-            let employeeType = person.entrantType as! Employee
+            let employeeType = entrantType as! Employee
             
             rideInfo = "Unlimited Rides"
             foodDiscountInfo = "\(employeeType.getDiscountAccessDetail().food)% Food Discount"
@@ -248,16 +249,16 @@ func generatePass(person: Person) -> Pass? {
     }
 }
 
-func gatherRequiredInfo(person:Person) throws -> RequiredInfo {
+func gatherRequiredInfo(entrantType: Entrant, person: PersonalInfo) throws -> PersonalInfo {
     
-    var infoGathered = RequiredInfo()
+    var infoGathered = PersonalInfo()
     
-    switch person.entrantType {
+    switch entrantType {
     case is Guest:
-        let guestType = person.entrantType as! Guest
+        let guestType = entrantType as! Guest
         switch guestType {
         case .freeChild:
-            if let dateOfBirth = person.info.dateOfBirth {
+            if let dateOfBirth = person.dateOfBirth {
                 infoGathered.dateOfBirth = dateOfBirth
             } else {
                 throw RequiredInfoError.MissingDateOfBirth
@@ -269,32 +270,32 @@ func gatherRequiredInfo(person:Person) throws -> RequiredInfo {
         return infoGathered
     default:
         // Default will be employee type, require all info except date of birth
-        if let firstName = person.info.firstName {
+        if let firstName = person.firstName {
             infoGathered.firstName = firstName
         } else {
             throw RequiredInfoError.MissingFirstName
         }
-        if let lastName = person.info.lastName {
+        if let lastName = person.lastName {
             infoGathered.lastName = lastName
         } else {
             throw RequiredInfoError.MissingLastName
         }
-        if let street = person.info.street {
+        if let street = person.street {
             infoGathered.street = street
         } else {
             throw RequiredInfoError.MissingStreetAddress
         }
-        if let city = person.info.city {
+        if let city = person.city {
             infoGathered.city = city
         } else {
             throw RequiredInfoError.MissingCity
         }
-        if let state = person.info.state {
+        if let state = person.state {
             infoGathered.state = state
         } else {
             throw RequiredInfoError.MissingState
         }
-        if let zip = person.info.zip {
+        if let zip = person.zip {
             infoGathered.zip = zip
         } else {
             throw RequiredInfoError.MissingZipCode

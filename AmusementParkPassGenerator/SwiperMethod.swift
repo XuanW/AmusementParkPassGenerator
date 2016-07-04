@@ -7,6 +7,9 @@
 //
 
 import Foundation
+import AudioToolbox
+
+var sound: SystemSoundID = 0
 
 enum RestrictedAreas {
     case kitchen
@@ -24,24 +27,28 @@ func areaAcessSwiper(entrantType: Entrant, person: PersonalInfo, toTestArea: Res
             } else {
                 print("Kitchen area access not allowed.")
             }
+            playSound(pass.areaAccess.kitchen)
         case .rideControl:
             if pass.areaAccess.rideControl == true {
                 print("Ride control area access allowed.")
             } else {
                 print("Ride control access not allowed.")
             }
+            playSound(pass.areaAccess.rideControl)
         case .maintenance:
             if pass.areaAccess.maintenance == true {
                 print("Maintenance area access allowed.")
             } else {
                 print("Maintenance area access not allowed.")
             }
+            playSound(pass.areaAccess.maintenance)
         case .office:
             if pass.areaAccess.office == true {
                 print("Office area access allowed.")
             } else {
                 print("Office area access not allowed.")
             }
+            playSound(pass.areaAccess.office)
         }
         
         if let dateOfBirth = pass.personalInfo.dateOfBirth {
@@ -49,4 +56,19 @@ func areaAcessSwiper(entrantType: Entrant, person: PersonalInfo, toTestArea: Res
         }
     }
 }
+
+func playSound(accessAllowed: Bool) {
+    let path: String?
+    if accessAllowed {
+        path = NSBundle.mainBundle().pathForResource("AccessGranted", ofType: "wav")
+    } else {
+        path = NSBundle.mainBundle().pathForResource("AccessDenied", ofType: "wav")
+    }
+    let url: NSURL = NSURL(fileURLWithPath: path!)
+    AudioServicesCreateSystemSoundID(url, &sound)
+    AudioServicesPlaySystemSound(sound)
+}
+
+
+
 

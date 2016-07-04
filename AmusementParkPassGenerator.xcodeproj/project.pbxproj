@@ -62,13 +62,13 @@
 		105DF4A91D278040008B91CB /* AmusementParkPassGenerator */ = {
 			isa = PBXGroup;
 			children = (
-				105DF4C61D2A354B008B91CB /* AccessDenied.wav */,
-				105DF4C71D2A354B008B91CB /* AccessGranted.wav */,
 				105DF4AA1D278040008B91CB /* AppDelegate.swift */,
 				105DF4AC1D278040008B91CB /* ViewController.swift */,
 				105DF4BE1D278172008B91CB /* EntrantModel.swift */,
 				105DF4C01D2A21B8008B91CB /* SwiperMethod.swift */,
 				105DF4AE1D278040008B91CB /* Main.storyboard */,
+				105DF4C61D2A354B008B91CB /* AccessDenied.wav */,
+				105DF4C71D2A354B008B91CB /* AccessGranted.wav */,
 				105DF4B11D278040008B91CB /* Assets.xcassets */,
 				105DF4B31D278040008B91CB /* LaunchScreen.storyboard */,
 				105DF4B61D278040008B91CB /* Info.plist */,

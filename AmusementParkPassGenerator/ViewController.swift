@@ -15,7 +15,7 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view, typically from a nib.
         
         // Plug data for pass generation testing
-        
+//        
 //        let plugClassicGuest = PersonalInfo(firstName: nil, lastName: nil, dateOfBirth: nil, street: nil, city: nil, state: nil, zip: nil)
 //        printPass(Guest.classic, person: plugClassicGuest)
 //        print("\n")

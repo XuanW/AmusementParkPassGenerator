@@ -10,10 +10,6 @@ import Foundation
 
 // MARK: Protocols
 
-protocol Entrant {
-
-}
-
 protocol AreaAccess {
     //var areaAccess: AreaAccessType  { get }
     func getAreaAccessDetail() -> AreaAccessType
@@ -27,6 +23,10 @@ protocol RideAccess {
 protocol DiscountAccess {
     //var discountAccess: DiscountAccessType  { get }
     func getDiscountAccessDetail() -> DiscountAccessType
+}
+
+protocol Entrant: AreaAccess, RideAccess, DiscountAccess {
+    
 }
 
 // MARK: Access types
@@ -51,7 +51,7 @@ struct DiscountAccessType {
 
 // MARK: Entrant types
 
-enum Guest: Entrant, AreaAccess, RideAccess, DiscountAccess {
+enum Guest: Entrant {
     case classic
     case vip
     case freeChild
@@ -87,7 +87,7 @@ enum Guest: Entrant, AreaAccess, RideAccess, DiscountAccess {
 }
 
 
-enum Employee: Entrant, AreaAccess, RideAccess, DiscountAccess {
+enum Employee: Entrant {
     case hourlyFood
     case hourlyRide
     case hourlyMaintenance
@@ -123,7 +123,7 @@ enum Employee: Entrant, AreaAccess, RideAccess, DiscountAccess {
     }
 }
 
-enum Manager: Entrant, AreaAccess, RideAccess, DiscountAccess {
+enum Manager: Entrant {
     case manager
     
     func getAreaAccessDetail() -> AreaAccessType {
@@ -205,46 +205,40 @@ func generatePass(entrantType: Entrant, person: PersonalInfo) -> Pass? {
             title = "Amusement Park Pass"
         }
         
+        areaAccess = entrantType.getAreaAccessDetail()
+        rideAccess = entrantType.getRideAccessDetail()
+        discountAccess = entrantType.getDiscountAccessDetail()
+        
+        foodDiscountInfo = "\(discountAccess.food)% food discount."
+        merchandiseDiscountInfo = "\(discountAccess.merchandise)% merchandise discount."
+        
+        if rideAccess.accessAllRides == true {
+            if rideAccess.skipAllRideLines == true {
+                rideInfo = "Unlimited Rides. Priority: VIP."
+            } else {
+                rideInfo = "Unlimited Rides. Priority: Regular."
+            }
+        } else {
+            rideInfo = "No access to rides."
+        }
+        
         switch entrantType {
         case is Guest:
             let guestType = entrantType as! Guest
-            areaAccess = guestType.getAreaAccessDetail()
-            rideAccess = guestType.getRideAccessDetail()
-            discountAccess = guestType.getDiscountAccessDetail()
-            foodDiscountInfo = "\(discountAccess.food)% Food Discount"
-            merchandiseDiscountInfo = "\(discountAccess.merchandise)% Merchandise Discount"
-            
             switch guestType {
             case .classic:
                 passType = "Classic Guest Pass"
-                rideInfo = "Unlimited Rides. Priority: Regular."
             case .freeChild:
                 passType = "Child Guest Pass"
-                rideInfo = "Unlimited Rides. Priority: Regular."
             case .vip:
                 passType = "VIP Guest Pass"
-                rideInfo = "Unlimited Rides. Priority: VIP."
-                
             }
+            
         case is Manager:
-            let managerType = entrantType as! Manager
-            areaAccess = managerType.getAreaAccessDetail()
-            rideAccess = managerType.getRideAccessDetail()
-            discountAccess = managerType.getDiscountAccessDetail()
-            foodDiscountInfo = "\(discountAccess.food)% Food Discount"
-            merchandiseDiscountInfo = "\(discountAccess.merchandise)% Merchandise Discount"
             passType = "Manager"
-            rideInfo = "Unlimited Rides. Priority: Regular."
             
         default:
             let employeeType = entrantType as! Employee
-            areaAccess = employeeType.getAreaAccessDetail()
-            rideAccess = employeeType.getRideAccessDetail()
-            discountAccess = employeeType.getDiscountAccessDetail()
-            rideInfo = "Unlimited Rides. Priority: Regular."
-            foodDiscountInfo = "\(discountAccess.food)% Food Discount"
-            merchandiseDiscountInfo = "\(discountAccess.merchandise)% Merchandise Discount"
-
             switch employeeType {
             case .hourlyFood:
                 passType = "Hourly Employee - Food Services"

@@ -45,9 +45,17 @@ class ViewController: UIViewController {
 //        print("\n")
         
         
-        let plugHourlyEmployeeMaintenance = PersonalInfo(firstName: "Charlie", lastName: "Brown", dateOfBirth: "07-03-1986", street: "920 Peanut Street", city: "Chicago", state: "IL", zip: "37283")
+        let plugHourlyEmployeeMaintenance = PersonalInfo(firstName: "Charlie", lastName: "Brown", dateOfBirth: "07-04-1986", street: "920 Peanut Street", city: "Chicago", state: "IL", zip: "37283")
         printPass(Employee.hourlyMaintenance, person: plugHourlyEmployeeMaintenance)
-        areaAcessSwiper(Employee.hourlyMaintenance, person: plugHourlyEmployeeMaintenance, toTestArea: RestrictedAreas.office)
+        print("\n")
+        if let pass = generatePass(Employee.hourlyMaintenance, person: plugHourlyEmployeeMaintenance) {
+            print("Swiper methods tests:")
+            areaAcessSwiper(pass, toTestArea: RestrictedAreas.office)
+            print("\n")
+            rideAccessSwiper(pass)
+            print("\n")
+            discountAccessSwiper(pass)
+        }
     }
 
     override func didReceiveMemoryWarning() {

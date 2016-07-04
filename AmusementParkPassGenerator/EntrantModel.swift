@@ -62,11 +62,6 @@ struct PersonalInfo {
 
 }
 
-//struct Person {
-//    let entrantType: Entrant
-//    let info: PersonalInfo
-//}
-
 struct Pass {
     let title: String
     let passType: String
@@ -74,6 +69,8 @@ struct Pass {
     let foodDiscountInfo: String
     let merchandiseDiscountInfo: String
     let areaAccess: AreaAccessType
+    let rideAccess: RideAccessType
+    let discountAccess: DiscountAccessType
     let personalInfo: PersonalInfo
 }
 
@@ -197,6 +194,8 @@ func generatePass(entrantType: Entrant, person: PersonalInfo) -> Pass? {
     let foodDiscountInfo: String
     let merchandiseDiscountInfo: String
     let areaAccess: AreaAccessType
+    let rideAccess: RideAccessType
+    let discountAccess: DiscountAccessType
     
     do {
         let infoGathered = try gatherRequiredInfo(entrantType, person: person)
@@ -209,9 +208,11 @@ func generatePass(entrantType: Entrant, person: PersonalInfo) -> Pass? {
         switch entrantType {
         case is Guest:
             let guestType = entrantType as! Guest
-            foodDiscountInfo = "\(guestType.getDiscountAccessDetail().food)% Food Discount"
-            merchandiseDiscountInfo = "\(guestType.getDiscountAccessDetail().merchandise)% Merchandise Discount"
             areaAccess = guestType.getAreaAccessDetail()
+            rideAccess = guestType.getRideAccessDetail()
+            discountAccess = guestType.getDiscountAccessDetail()
+            foodDiscountInfo = "\(discountAccess.food)% Food Discount"
+            merchandiseDiscountInfo = "\(discountAccess.merchandise)% Merchandise Discount"
             
             switch guestType {
             case .classic:
@@ -227,12 +228,13 @@ func generatePass(entrantType: Entrant, person: PersonalInfo) -> Pass? {
             }
         default:
             let employeeType = entrantType as! Employee
-            
-            rideInfo = "Unlimited Rides"
-            foodDiscountInfo = "\(employeeType.getDiscountAccessDetail().food)% Food Discount"
-            merchandiseDiscountInfo = "\(employeeType.getDiscountAccessDetail().merchandise)% Merchandise Discount"
             areaAccess = employeeType.getAreaAccessDetail()
-            
+            rideAccess = employeeType.getRideAccessDetail()
+            discountAccess = employeeType.getDiscountAccessDetail()
+            rideInfo = "Unlimited Rides"
+            foodDiscountInfo = "\(discountAccess.food)% Food Discount"
+            merchandiseDiscountInfo = "\(discountAccess.merchandise)% Merchandise Discount"
+
             switch employeeType {
             case .hourlyFood:
                 passType = "Hourly Employee - Food Services"
@@ -245,7 +247,7 @@ func generatePass(entrantType: Entrant, person: PersonalInfo) -> Pass? {
             }
         }
         
-        return Pass(title: title, passType: passType, rideInfo: rideInfo, foodDiscountInfo: foodDiscountInfo, merchandiseDiscountInfo: merchandiseDiscountInfo, areaAccess: areaAccess, personalInfo: infoGathered)
+        return Pass(title: title, passType: passType, rideInfo: rideInfo, foodDiscountInfo: foodDiscountInfo, merchandiseDiscountInfo: merchandiseDiscountInfo, areaAccess: areaAccess, rideAccess: rideAccess, discountAccess: discountAccess, personalInfo: infoGathered)
         
     } catch let error {
         print("Error: \(error)")

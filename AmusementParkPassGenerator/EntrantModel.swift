@@ -55,6 +55,8 @@ enum Guest: Entrant {
     case classic
     case vip
     case freeChild
+    case seasonPass
+    case senior
     
     func getAreaAccessDetail() -> AreaAccessType {
         return AreaAccessType(amusement: true, kitchen: false, rideControl: false, maintenance: false, office: false)
@@ -65,7 +67,7 @@ enum Guest: Entrant {
         switch self {
         case .classic, .freeChild:
             skipAllRideLines = false
-        case .vip:
+        case .vip, .seasonPass, .senior:
             skipAllRideLines =  true
         }
         return RideAccessType(accessAllRides: true, skipAllRideLines: skipAllRideLines)
@@ -75,9 +77,12 @@ enum Guest: Entrant {
         var foodDiscount: Int
         var merchandiseDiscount: Int
         switch self {
-        case .vip:
+        case .vip, .seasonPass:
             foodDiscount = 10
             merchandiseDiscount = 20
+        case .senior:
+            foodDiscount = 10
+            merchandiseDiscount = 10
         default:
             foodDiscount = 0
             merchandiseDiscount = 0
@@ -232,6 +237,10 @@ func generatePass(entrantType: Entrant, person: PersonalInfo) -> Pass? {
                 passType = "Child Guest Pass"
             case .vip:
                 passType = "VIP Guest Pass"
+            case .seasonPass:
+                passType = "Season Guest Pass"
+            case .senior:
+                passType = "Senior Guest Pass"
             }
             
         case is Manager:
@@ -272,6 +281,37 @@ func gatherRequiredInfo(entrantType: Entrant, person: PersonalInfo) throws -> Pe
             } else {
                 throw RequiredInfoError.MissingDateOfBirth
             }
+        case .seasonPass:
+            guard person.firstName != nil else {
+                throw RequiredInfoError.MissingFirstName
+            }
+            guard person.lastName != nil else {
+                throw RequiredInfoError.MissingLastName
+            }
+            guard person.street != nil else {
+                throw RequiredInfoError.MissingStreetAddress
+            }
+            guard person.city != nil else {
+                throw RequiredInfoError.MissingCity
+            }
+            guard person.state != nil else {
+                throw RequiredInfoError.MissingState
+            }
+            guard person.zip != nil else {
+                throw RequiredInfoError.MissingZipCode
+            }
+            return person
+        case .senior:
+            guard person.firstName != nil else {
+                throw RequiredInfoError.MissingFirstName
+            }
+            guard person.lastName != nil else {
+                throw RequiredInfoError.MissingLastName
+            }
+            guard person.dateOfBirth != nil else {
+                throw RequiredInfoError.MissingDateOfBirth
+            }
+            return person
         default:
             return person
         }
